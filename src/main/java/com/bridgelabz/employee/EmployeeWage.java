@@ -1,6 +1,9 @@
 package com.bridgelabz.employee;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 interface IComputeEmpWage {
 
@@ -17,27 +20,36 @@ public class EmployeeWage implements IComputeEmpWage {
     public static final int is_full_time = 2;
 
     private int numOfCompany = 0;
-    private List<CompanyEmpWage> companyEmpWageArray;
+    private LinkedList<CompanyEmpWage> companyEmpWageList;
+    private Map<String, CompanyEmpWage> companyToEmpWageMap;
 
     public EmployeeWage() {
-        companyEmpWageArray = new ArrayList<>();
+        companyEmpWageList = new LinkedList<>();
+        companyToEmpWageMap = new HashMap<>();
     }
 
     public void addCompanyEmpWage(String company, int emp_rate_per_hour, int num_of_working_days,
                                   int max_hours_in_month) {
-        companyEmpWageArray
-                .add(new CompanyEmpWage(company, emp_rate_per_hour, num_of_working_days, max_hours_in_month));
+
+        CompanyEmpWage companyEmpWage = new CompanyEmpWage(company, emp_rate_per_hour, num_of_working_days,
+                max_hours_in_month);
+        companyEmpWageList.add(companyEmpWage);
+        companyToEmpWageMap.put(company, companyEmpWage);
         numOfCompany++;
     }
 
     public void computeEmpWage() {
-        for (int i = 0; i < numOfCompany; i++) {
-            CompanyEmpWage companyEmpWage = companyEmpWageArray.get(i);
+        for (int i = 0; i < companyEmpWageList.size(); i++) {
+            CompanyEmpWage companyEmpWage = companyEmpWageList.get(i);
             companyEmpWage.setTotalEmpWage(this.computeEmpWage(companyEmpWage));
 
             System.out.println(companyEmpWage);
         }
 
+    }
+
+    public int getTotalWage(String company) {
+        return companyToEmpWageMap.get(company).totalEmpWage;
     }
 
     public int computeEmpWage(CompanyEmpWage companyEmpWage) {
@@ -66,16 +78,16 @@ public class EmployeeWage implements IComputeEmpWage {
         return totalEmpHrs * companyEmpWage.emp_rate_per_hour;
 
     }
+
     public void printTotalWage() {
         for (int i = 0; i < numOfCompany; i++) {
-            System.out.println("Total salary for " + companyEmpWageArray.get(i).getCompany() + ": $"
-                    + companyEmpWageArray.get(i).getTotalEmpWage());
-            System.out.println("Daily Wages for " + companyEmpWageArray.get(i).getCompany() + " : $"
-                    + companyEmpWageArray.get(i).getDailyWages());
+            System.out.println("Total salary for " + companyEmpWageList.get(i).getCompany() + ": $"
+                    + companyEmpWageList.get(i).getTotalEmpWage());
+            System.out.println("Daily Wages for " + companyEmpWageList.get(i).getCompany() + " : $"
+                    + companyEmpWageList.get(i).getDailyWages());
 
         }
     }
-
     public static void main(String[] args) {
 
         System.out.println("Welcome to Employee Wage Computation Program!");
