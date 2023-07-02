@@ -66,11 +66,13 @@ public class EmployeeWage implements IComputeEmpWage {
         return totalEmpHrs * companyEmpWage.emp_rate_per_hour;
 
     }
-
     public void printTotalWage() {
         for (int i = 0; i < numOfCompany; i++) {
             System.out.println("Total salary for " + companyEmpWageArray.get(i).getCompany() + ": $"
                     + companyEmpWageArray.get(i).getTotalEmpWage());
+            System.out.println("Daily Wages for " + companyEmpWageArray.get(i).getCompany() + " : $"
+                    + companyEmpWageArray.get(i).getDailyWages());
+
         }
     }
 
