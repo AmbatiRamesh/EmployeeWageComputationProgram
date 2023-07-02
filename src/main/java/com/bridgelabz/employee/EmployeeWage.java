@@ -1,6 +1,16 @@
 package com.bridgelabz.employee;
 
-public class EmployeeWage {
+interface IComputeEmpWage {
+
+    public void addCompanyEmpWage(String company, int wagePerHour, int totalWorkingDays, int maxWorkingHour);
+
+    public int computeEmpWage(CompanyEmpWage companyEmpWage);
+
+    public void printTotalWage();
+}
+
+public class EmployeeWage implements IComputeEmpWage {
+
     public static final int is_part_time = 1;
     public static final int is_full_time = 2;
 
@@ -11,22 +21,22 @@ public class EmployeeWage {
         companyEmpWageArray = new CompanyEmpWage[5];
     }
 
-    private void addCompanyEmpWage(String company, int emp_rate_per_hour, int num_of_working_days,
-                                   int max_hours_in_month) {
+    public void addCompanyEmpWage(String company, int emp_rate_per_hour, int num_of_working_days,
+                                  int max_hours_in_month) {
         companyEmpWageArray[numOfCompany] = new CompanyEmpWage(company, emp_rate_per_hour, num_of_working_days,
                 max_hours_in_month);
         numOfCompany++;
     }
 
-    private void computeEmpWage() {
+    public void computeEmpWage() {
         for (int i = 0; i < numOfCompany; i++) {
             companyEmpWageArray[i].setTotalEmpWage(this.computeEmpWage(companyEmpWageArray[i]));
+            System.out.println(companyEmpWageArray[i]);
         }
+
     }
 
-    private int computeEmpWage(CompanyEmpWage companyEmpWage) {
-
-        System.out.println("Welcome to Employee Wage Computation Program!");
+    public int computeEmpWage(CompanyEmpWage companyEmpWage) {
 
         int empHrs = 0;
         int totalEmpHrs = 0;
@@ -50,11 +60,21 @@ public class EmployeeWage {
             System.out.println("Day: " + totalWorkingDays + " Emp Hr: " + empHrs);
         }
         return totalEmpHrs * companyEmpWage.emp_rate_per_hour;
+
     }
+
+    public void printTotalWage() {
+        for (int i = 0; i < numOfCompany; i++) {
+            System.out.println("Total salary for " + companyEmpWageArray[i].getCompany() + ": $"
+                    + companyEmpWageArray[i].getTotalEmpWage());
+        }
+    }
+
     public static void main(String[] args) {
         EmployeeWage empWageBuilder = new EmployeeWage();
         empWageBuilder.addCompanyEmpWage("DMart", 20, 2, 10);
         empWageBuilder.addCompanyEmpWage("Reliance", 10, 4, 20);
         empWageBuilder.computeEmpWage();
+        empWageBuilder.printTotalWage();
     }
 }
