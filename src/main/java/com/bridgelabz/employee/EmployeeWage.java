@@ -1,4 +1,6 @@
 package com.bridgelabz.employee;
+import java.util.ArrayList;
+import java.util.List;
 
 interface IComputeEmpWage {
 
@@ -15,23 +17,25 @@ public class EmployeeWage implements IComputeEmpWage {
     public static final int is_full_time = 2;
 
     private int numOfCompany = 0;
-    private CompanyEmpWage[] companyEmpWageArray;
+    private List<CompanyEmpWage> companyEmpWageArray;
 
     public EmployeeWage() {
-        companyEmpWageArray = new CompanyEmpWage[5];
+        companyEmpWageArray = new ArrayList<>();
     }
 
     public void addCompanyEmpWage(String company, int emp_rate_per_hour, int num_of_working_days,
                                   int max_hours_in_month) {
-        companyEmpWageArray[numOfCompany] = new CompanyEmpWage(company, emp_rate_per_hour, num_of_working_days,
-                max_hours_in_month);
+        companyEmpWageArray
+                .add(new CompanyEmpWage(company, emp_rate_per_hour, num_of_working_days, max_hours_in_month));
         numOfCompany++;
     }
 
     public void computeEmpWage() {
         for (int i = 0; i < numOfCompany; i++) {
-            companyEmpWageArray[i].setTotalEmpWage(this.computeEmpWage(companyEmpWageArray[i]));
-            System.out.println(companyEmpWageArray[i]);
+            CompanyEmpWage companyEmpWage = companyEmpWageArray.get(i);
+            companyEmpWage.setTotalEmpWage(this.computeEmpWage(companyEmpWage));
+
+            System.out.println(companyEmpWage);
         }
 
     }
@@ -65,16 +69,20 @@ public class EmployeeWage implements IComputeEmpWage {
 
     public void printTotalWage() {
         for (int i = 0; i < numOfCompany; i++) {
-            System.out.println("Total salary for " + companyEmpWageArray[i].getCompany() + ": $"
-                    + companyEmpWageArray[i].getTotalEmpWage());
+            System.out.println("Total salary for " + companyEmpWageArray.get(i).getCompany() + ": $"
+                    + companyEmpWageArray.get(i).getTotalEmpWage());
         }
     }
 
     public static void main(String[] args) {
+
+        System.out.println("Welcome to Employee Wage Computation Program!");
+
         EmployeeWage empWageBuilder = new EmployeeWage();
         empWageBuilder.addCompanyEmpWage("DMart", 20, 2, 10);
         empWageBuilder.addCompanyEmpWage("Reliance", 10, 4, 20);
         empWageBuilder.computeEmpWage();
         empWageBuilder.printTotalWage();
+
     }
 }
